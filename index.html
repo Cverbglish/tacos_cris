@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tacos Cris</title>
+
+    <!-- Ícono de la página -->
+    <link rel="icon" href="assets/images/logo.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/images/logo.ico" type="image/x-icon">
+
+    <!-- for icons  -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <!-- bootstrap  -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- for swiper slider  -->
+    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+
+    <!-- fancy box  -->
+    <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
+    <!-- custom css  -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="body-fixed">
+    <!-- start of header  -->
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header-logo">
+                        <a href="index.html">
+                            <img src="logo.png" width="100" height="65" alt="Logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="main-navigation">
+                        <button class="menu-toggle"><span></span><span></span></button>
+                        <nav class="header-menu">
+                            <ul class="menu food-nav-menu">
+                                <li><a href="#home">Inicio</a></li>
+                                <li><a href="#menu">Menú</a></li>
+                                <li><a href="#gallery">Galeria</a></li>
+                                <li><a href="#contact">Contacto</a></li>
+                            </ul>
+                        </nav>
+                        <div class="header-right">
+                            <form action="#" class="header-search-form for-des">
+                                <input type="search" class="form-input" placeholder="Buscar...">
+                                <button type="submit">
+                                    <i class="uil uil-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header ends  -->
+
+    <div id="viewport">
+        <div id="js-scroll-content">
+            <section class="main-banner" id="home">
+                <div class="js-parallax-scene">
+                    <div class="banner-shape-1 w-100" data-depth="0.30">
+                        <img src="assets/images/berry.png" alt="">
+                    </div>
+                    <div class="banner-shape-2 w-100" data-depth="0.25">
+                        <img src="assets/images/leaf.png" alt="">
+                    </div>
+                </div>
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="banner-text">
+                                    <h1 class="h1-title">
+                                        Bienvenido a
+                                        <span>Tacos Cris</span>
+                                        .
+                                    </h1>
+                                    <p>En Tacos Cris encontrarás los tacos más sabrosos, preparados con los mejores ingredientes frescos y de calidad. Desde los clásicos hasta nuestras creaciones especiales, cada bocado te sorprenderá. Ven y disfruta de una experiencia única en un ambiente cálido y acogedor. ¡Te esperamos!</p>
+                                    <div class="banner-btn mt-4">
+                                        <a href="#menu" class="sec-btn">Ver Menú</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="banner-img-wp">
+                                    <div class="banner-img" style="background-image: url(assets/images/main_b.jpg);">
+                                    </div>
+                                </div>
+                                <div class="banner-img-text mt-4 m-auto">
+                                    <h5 class="h5-title">Tacos</h5>
+                                    <p>Tacos de carne jugosa, frescos y llenos de sabor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section style="background-image: url(assets/images/menu-bg.png);" class="our-menu section bg-light repeat-img" id="menu">
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">Nuestro menú</p>
+                                    <h2 class="h2-title">Sabores que conquistan, <span>tacos que te hacen volver</span></h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Barra de búsqueda -->
+                        <div id="searchContainer">
+                            <i class="uil uil-search search-icon"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre, precio o descripción..." onkeyup="filterMenu()">
+                        </div>
+                        <!-- Filtros por categorías -->
+                        <div class="menu-tab-wp">
+                            <div class="row">
+                                <div class="col-lg-12 m-auto">
+                                    <div class="menu-tab text-center">
+                                        <ul class="filters">
+                                            <div class="filter-active"></div>
+                                            <li class="filter" data-filter=".all" onclick="filterByCategory('all')">
+                                                <img src="assets/images/todo.png" alt=""> Todo
+                                            </li>
+                                            <li class="filter" data-filter=".tacos" onclick="filterByCategory('tacos')">
+                                                <img src="assets/images/taco.png" alt=""> Tacos
+                                            </li>
+                                            <li class="filter" data-filter=".quesadillas" onclick="filterByCategory('quesadillas')">
+                                                <img src="assets/images/quesadilla.png" alt=""> Quesadillas
+                                            </li>
+                                            <li class="filter" data-filter=".tortas" onclick="filterByCategory('tortas')">
+                                                <img src="assets/images/torta.png" alt=""> Tortas
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('megas')">
+                                                <img src="assets/images/mega.png" alt=""> Megas
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('orugas')">
+                                                <img src="assets/images/oruga.png" alt=""> orugas
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('volcanes')">
+                                                <img src="assets/images/volcan.png" alt=""> Volcanes
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('quesitortas')">
+                                                <img src="assets/images/torta.png" alt=""> Quesitortas
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('chilaquiles')">
+                                                <img src="assets/images/chilaquiles.png" alt=""> Chilaquiles
+                                            </li>
+                                            <li class="filter" data-filter=".megas" onclick="filterByCategory('bebidas')">
+                                                <img src="assets/images/bebida.png" alt=""> Bbebidas
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Lista de platillos -->
+                        <div class="menu-list-row">
+                            <div class="row g-xxl-5 bydefault_show" id="menu-dish">
+                                <!-- Platillos generados dinámicamente aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+            
+
+            <section class="two-col-sec section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <div class="sec-img mt-5">
+                                <img src="assets/images/mega.jpg" alt="">
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="sec-text">
+                                <h2 class="xxl-title">Megas</h2>
+                                <p>Las Megas de Tacos Cris son una de las opciones más populares y sabrosas del menú. Se trata de quesadillas de harina, pero con una diferencia: se preparan con tres tortillas, apiladas y rellenas generosamente de carne jugosa, acompañadas de su respectiva verdura fresca y salsa casera. Esta combinación de ingredientes crea una explosión de sabor en cada bocado. 🌮</p>
+                                <p>Lo que las hace aún más especiales es su tamaño y la satisfacción que ofrecen. Son perfectas para quienes buscan una comida abundante, sabrosa y completa. Además, cada Mega está hecha con ingredientes frescos y de calidad, lo que garantiza una experiencia gastronómica única en Tacos Cris. ¡Una opción irresistible que nunca decepciona!</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="two-col-sec section pt-0">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 order-lg-1 order-2">
+                            <div class="sec-text">
+                                <h2 class="xxl-title">Volcanes</h2>
+                                <p>Los Volcanes de Tacos Cris son una delicia hecha con tortillas duritas de maíz, rellenas con queso derretido y carne jugosa. Su sabor único y su textura crujiente los convierten en una opción irresistible para quienes disfrutan de una comida sabrosa y auténtica. Perfectos para compartir o disfrutar solo, ¡una explosión de sabor en cada bocado!</p>
+                                <p>Cada volcán es preparado al momento con ingredientes frescos y de calidad, asegurando que cada mordida esté llena de sabor y satisfacción. Son ideales para quienes buscan algo diferente, sabroso y lleno de energía. ¡No te puedes perder esta experiencia única en Tacos Cris!</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 order-lg-2 order-1">
+                            <div class="sec-img">
+                                <img src="assets/images/volcan.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="book-table section bg-light">
+                <div class="book-table-shape">
+                    <img src="assets/images/table-leaves-shape.png" alt="">
+                </div>
+
+                <div class="book-table-shape book-table-shape2">
+                    <img src="assets/images/table-leaves-shape.png" alt="">
+                </div>
+
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">Mesa de Libros</p>
+                                    <h2 class="h2-title">Mesa de Apertura</h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="book-table-info">
+                            <div class="row align-items-center">
+                                <div class="col-lg-4">
+                                    <div class="table-title text-center">
+                                        <h3>Jueves a Domingo</h3>
+                                        <p>7:00 pm - 11:59 pm</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="call-now text-center">
+                                        <i class="uil uil-phone"></i>
+                                        <a href="tel:+91-8866998866">+52 - 477 706 0853</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="table-title text-center">
+                                        <h3>Jueves a Domingo</h3>
+                                        <p>7::00 pm - 11:59 pm</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="gallery">
+                            <div class="col-lg-10 m-auto">
+                                <div class="book-table-img-slider" id="icon">
+                                    <div class="swiper-wrapper">
+                                        <a href="assets/images/bt1.png" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt1.jpg)"></a>
+                                        <a href="assets/images/bt2.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt2.jpg)"></a>
+                                        <a href="assets/images/bt3.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt3.jpg)"></a>
+                                        <a href="assets/images/bt4.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt4.jpg)"></a>
+                                        <a href="assets/images/bt1.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt1.jpg)"></a>
+                                        <a href="assets/images/bt2.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt2.jpg)"></a>
+                                        <a href="assets/images/bt3.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt3.jpg)"></a>
+                                        <a href="assets/images/bt4.jpg" data-fancybox="table-slider"
+                                            class="book-table-img back-img swiper-slide"
+                                            style="background-image: url(assets/images/bt4.jpg)"></a>
+                                    </div>
+
+                                    <div class="swiper-button-wp">
+                                        <div class="swiper-button-prev swiper-button">
+                                            <i class="uil uil-angle-left"></i>
+                                        </div>
+                                        <div class="swiper-button-next swiper-button">
+                                            <i class="uil uil-angle-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <section class="location-section" id="location">
+                    <div class="container">
+                        <div class="section-title text-center">
+                            <h2>Ubicación de nuestra sucursal</h2>
+                            <p>Ven y disfruta de nuestros deliciosos platillos en un ambiente cómodo y agradable.</p>
+                            <div class="title-shape">
+                                <img src="assets/images/title-shape.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="location-content">
+                            <div class="map-container">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3722.244382767069!2d-101.72494202606363!3d21.10282098523329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842bc0865658dd0b%3A0x902f2bb1521e0e05!2sTACOS%20CRIS!5e0!3m2!1ses-419!2smx!4v1735779210071!5m2!1ses-419!2smx" 
+                                    width="100%" 
+                                    height="100%" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                            <div class="location-details">
+                                <h3>Nuestra Sucursal</h3>
+                                <p><b>Dirección:</b> TACOS CRIS, C. Cumbres los Sauces, Cumbres deL sol, Cd Satelite, 37353 León de los Aldama, Gto.</p>
+                                <p><b>Horario:</b> Jueves a Domingo, 7:00 PM - 11:59 PM</p>
+                                <p><b>Teléfono:</b> +52 477 706 0853</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                
+
+            <!-- footer starts  -->
+            <footer class="site-footer" id="contact">
+                <div class="top-footer section">
+                    <div class="sec-wp">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="footer-info">
+                                        <div class="footer-logo">
+                                            <a href="index.html">
+                                                <img src="logo.png" alt="">
+                                            </a>
+                                        </div>
+                                        <p>¡Come bien!
+                                        </p>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="uil uil-facebook-f"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="uil uil-instagram"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="uil uil-github-alt"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="uil uil-youtube"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="footer-flex-box">
+                                        <div class="footer-table-info">
+                                            <h3 class="h3-title">Horas Abiertas</h3>
+                                            <ul>
+                                                <li><i class="uil uil-clock"></i> Jueves - Domingo : 7:00 pm - 11:59 pm</li>
+                                            </ul>
+                                        </div>
+                                        <div class="footer-menu food-nav-menu">
+                                            <h3 class="h3-title">Links</h3>
+                                            <ul class="column-2">
+                                                <li>
+                                                    <a href="#home" class="footer-active-menu">Inicio</a>
+                                                </li>
+                                                <li><a href="#menu">Menú</a></li>
+                                                <li><a href="#gallery">Galeria</a></li>
+                                                <li><a href="#contact">Contacto</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="footer-menu">
+                                            <h3 class="h3-title">Compañia</h3>
+                                            <ul>
+                                                <li><a href="#">Terminos & Condiciones</a></li>
+                                                <li><a href="#">Politica de Privacidad</a></li>
+                                                <li><a href="#">Politica de Cookies</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <div class="copyright-text">
+                                    <p>Copyright &copy; 2025 <span class="name">Abraham.</span>Todos los Derechos Reservados.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="scrolltop"><i class="uil uil-angle-up"></i></button>
+                    </div>
+                </div>
+            </footer>
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <!-- jquery  -->
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <!-- bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+
+    <!-- fontawesome  -->
+    <script src="assets/js/font-awesome.min.js"></script>
+
+    <!-- swiper slider  -->
+    <script src="assets/js/swiper-bundle.min.js"></script>
+
+    <!-- mixitup -- filter  -->
+    <script src="assets/js/jquery.mixitup.min.js"></script>
+
+    <!-- fancy box  -->
+    <script src="assets/js/jquery.fancybox.min.js"></script>
+
+    <!-- parallax  -->
+    <script src="assets/js/parallax.min.js"></script>
+
+    <!-- gsap  -->
+    <script src="assets/js/gsap.min.js"></script>
+
+    <!-- scroll trigger  -->
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+    <!-- scroll to plugin  -->
+    <script src="assets/js/ScrollToPlugin.min.js"></script>
+    <!-- rellax  -->
+    <!-- <script src="assets/js/rellax.min.js"></script> -->
+    <!-- <script src="assets/js/rellax-custom.js"></script> -->
+    <!-- smooth scroll  -->
+    <script src="assets/js/smooth-scroll.js"></script>
+    <!-- custom js  -->
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+
+</body>
+
+</html>
