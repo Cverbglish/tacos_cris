@@ -39,7 +39,7 @@ const menuItems = [
     {
         name: 'Tacos de Tripa',
         category: 'Tacos',
-        price: 16,
+        price: 17,
         image: 'assets/products_images/tacos/tacos_tripa.jpg',
         description: 'Deliciosos tacos de tripa, con salsa especial y acompañados de cebolla y cilantro.'
     },
@@ -126,7 +126,7 @@ const menuItems = [
     {
         name: 'Quesadillas de Tripa',
         category: 'Quesadillas',
-        price: 25,
+        price: 30,
         image: 'assets/products_images/quesadillas/quesadilla_tripa.jpg',
         description: 'Deliciosas quesadillas rellenas de tripa con queso y acompañadas de verduras, disponibles en maíz o harina, ideales para disfrutar de un sabor casero y lleno de tradición.'
     },
@@ -213,7 +213,7 @@ const menuItems = [
     {
         name: 'Tortas de Tripa',
         category: 'Tortas',
-        price: 25,
+        price: 30,
         image: 'assets/products_images/tortas/torta_tripa.png',
         description: 'Tortas hechas con carne de tripa jugosa, acompañada de verduras frescas y salsas al gusto.'
     },
@@ -439,84 +439,84 @@ const menuItems = [
     {
         name: 'Volcanes de Bistec',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_bistec.jpg',
         description: 'Volcanes de bistec. Son tortillas duritas de maíz rellenas de queso y bistec, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Chorizo',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_chorizo.jpg',
         description: 'Volcanes de chorizo. Son tortillas duritas de maíz rellenas de queso y chorizo, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Costilla',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_costilla.jpg',
         description: 'Volcanes de costilla. Son tortillas duritas de maíz rellenas de queso y costilla, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Pastor',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_pastor.png',
         description: 'Volcanes de pastor. Son tortillas duritas de maíz rellenas de queso y pastor, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Lengua',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_lengua.png',
         description: 'Volcanes de lengua. Son tortillas duritas de maíz rellenas de queso y lengua, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Tripa',
         category: 'Volcanes',
-        price: 30,
+        price: 25,
         image: 'assets/products_images/volcanes/volcan_tripa.png',
         description: 'Volcanes de tripa. Son tortillas duritas de maíz rellenas de queso y tripa, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Sesos',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_sesos.png',
         description: 'Volcanes de Sesos. Son tortillas duritas de maíz rellenas de queso y sesos, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Buche',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_costilla.png',
         description: 'Volcanes de buche. Son tortillas duritas de maíz rellenas de queso y buche, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Suadero',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_costilla.png',
         description: 'Volcanes de suadero. Son tortillas duritas de maíz rellenas de queso y suadero, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Cabeza',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_costilla.png',
         description: 'Volcanes de cabeza. Son tortillas duritas de maíz rellenas de queso y cabeza, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Higado',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_costilla.png',
         description: 'Volcanes de higado. Son tortillas duritas de maíz rellenas de queso e higado, acompañados de una salsa que resalta su sabor.'
     },
     {
         name: 'Volcanes de Aldilla',
         category: 'Volcanes',
-        price: 30,
+        price: 22,
         image: 'assets/products_images/volcanes/volcan_aldilla.png',
         description: 'Volcanes de aldilla. Son tortillas duritas de maíz rellenas de queso y aldilla, acompañados de una salsa que resalta su sabor.'
     },
@@ -561,7 +561,7 @@ const menuItems = [
     {
         name: 'Quesitortas de Tripa',
         category: 'Quesitortas',
-        price: 30,
+        price: 35,
         image: 'assets/products_images/quesitortas/quesitorta_tripa.jpg',
         description: 'Las quesitortas combinan lo mejor de una torta y una quesadilla, con tortillas de maíz o harina rellenas de tripa, queso y salsa. Un platillo delicioso y completo que te hará volver por más.'
     },
@@ -613,7 +613,7 @@ const menuItems = [
     {
         name: 'Chilaquiles Grandes',
         category: 'Chilaquiles',
-        price: 50,
+        price: 100,
         image: 'assets/products_images/chilaquiles/chilaquiles_grandes.jpg',
         description: 'Disfruta de unos chilaquiles bien cargados con totopos crujientes, salsa roja o verde, carne al gusto, queso, crema y cebolla. Un platillo lleno de sabor y satisfacción para los más hambrientos.'
     },
@@ -630,28 +630,28 @@ const menuItems = [
     {
         name: 'Coca Cola 600ml',
         category: 'Bebidas',
-        price: 20,
+        price: 22,
         image: 'assets/products_images/bebidas/cocacola_600ml.png',
         description: 'Refrescante Coca-Cola de 600 ml, ideal para acompañar tus comidas o disfrutar en cualquier momento del día.'
     },
     {
         name: 'Sprite 600ml',
         category: 'Bebidas',
-        price: 20,
+        price: 22,
         image: 'assets/products_images/bebidas/sprite_600ml.png',
         description: 'Refrescante Sprite de 600 ml, ideal para acompañar tus comidas o disfrutar en cualquier momento del día.'
     },
     {
         name: 'Fanta 600ml',
         category: 'Bebidas',
-        price: 20,
+        price: 22,
         image: 'assets/products_images/bebidas/fanta_600ml.jpg',
         description: 'Refrescante Fanta de 600 ml, ideal para acompañar tus comidas o disfrutar en cualquier momento del día.'
     },
     {
         name: 'Mundet 600ml',
         category: 'Bebidas',
-        price: 20,
+        price: 22,
         image: 'assets/products_images/bebidas/mundet_600ml.jpg',
         description: 'Refrescante Mundet de 600 ml, ideal para acompañar tus comidas o disfrutar en cualquier momento del día.'
     }
