@@ -128,10 +128,12 @@
                         <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, 1)">+</button>
                     </div>
                     ${item.category !== 'Bebidas' ? ` 
-                    <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
-                        <option value="con verdura" ${order[item.name] && order[item.name].verdura === 'con verdura' ? 'selected' : ''}>Con verdura</option>
-                        <option value="sin verdura" ${order[item.name] && order[item.name].verdura === 'sin verdura' ? 'selected' : ''}>Sin verdura</option>
-                    </select>` : ''}
+                    <div class="select-wrapper">
+                        <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
+                            <option value="con verdura" ${order[item.name] && order[item.name].verdura === 'con verdura' ? 'selected' : ''}>Con verdura</option>
+                            <option value="sin verdura" ${order[item.name] && order[item.name].verdura === 'sin verdura' ? 'selected' : ''}>Sin verdura</option>
+                        </select>
+                    </div>` : ''}
                 `;
                 menuContainer.appendChild(menuItem);
             });
