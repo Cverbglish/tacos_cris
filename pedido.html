@@ -65,20 +65,6 @@
             }
         };
 
-        // Función que valida si el pedido se puede realizar según el día y hora
-    function canSubmitOrder() {
-        const now = new Date();
-        const dayOfWeek = now.getDay(); // 0 (domingo) a 6 (sábado)
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        
-        // Verificar si es de jueves a domingo entre 7:00 PM y 11:30 PM
-        if (dayOfWeek >= 4 && dayOfWeek <= 6 && ((hours > 19) || (hours === 19 && minutes >= 0)) && (hours < 23 || (hours === 23 && minutes <= 30))) {
-            return true;
-        }
-        return false;
-    }
-
         // Dynamically generate category buttons
         const categories = ['Todo', ...new Set(menuItems.map(item => item.category))];
         categories.forEach(category => {
@@ -111,10 +97,13 @@
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
                     <p><strong>$${item.price}</strong></p>
-                    <input type="number" min="0" value="0" 
-                        onchange="updateOrder('${item.name}', ${item.price}, this.value, this.nextElementSibling?.value)">
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, -1)">-</button>
+                        <input type="text" id="quantity-${item.name}" class="quantity-input" value="0" readonly>
+                        <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, 1)">+</button>
+                    </div>
                     ${item.category !== 'Bebidas' ? ` 
-                    <select onchange="updateOrder('${item.name}', ${item.price}, this.previousElementSibling.value, this.value)">
+                    <select onchange="updateOrder('${item.name}', ${item.price}, document.getElementById('quantity-${item.name}').value, this.value)">
                         <option value="con verdura">Con verdura</option>
                         <option value="sin verdura">Sin verdura</option>
                     </select>` : ''}
@@ -125,12 +114,17 @@
 
         renderMenu(menuItems);
 
-        // Update order
-        function updateOrder(productName, price, quantity, verduraOption) {
+        // Update order with buttons for quantity
+        function updateOrder(productName, price, change, verduraOption) {
+            const quantityInput = document.getElementById(`quantity-${productName}`);
+            let quantity = parseInt(quantityInput.value) + change;
+            if (quantity < 0) quantity = 0; // Prevent negative quantities
+            quantityInput.value = quantity;
+
             if (quantity > 0) {
                 order[productName] = {
                     price,
-                    quantity: parseInt(quantity),
+                    quantity,
                     verdura: verduraOption || '-'
                 };
             } else {
@@ -176,7 +170,7 @@
             customerName = prompt('¿Cuál es tu nombre?');
         }
 
-        // Enviar pedido
+        // Submit order
         function submitOrder() {
             if (Object.keys(order).length === 0) {
                 alert('Por favor selecciona al menos un producto.');
@@ -191,10 +185,16 @@
             }
 
             // Verificar si es el momento adecuado para realizar el pedido
-        if (!canSubmitOrder()) {
-            alert('Los pedidos solo pueden realizarse de jueves a domingo, de 7:00 PM a 11:30 PM.');
-            return;
-        }
+            const now = new Date();
+            const dayOfWeek = now.getDay(); // 0 (domingo) a 6 (sábado)
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            // Verificar si es de jueves a domingo entre 7:00 PM y 11:30 PM
+            if (dayOfWeek < 4 || dayOfWeek > 6 || (hours < 19 || (hours === 19 && minutes < 0)) || hours >= 23) {
+                alert('Los pedidos solo pueden realizarse de jueves a domingo, de 7:00 PM a 11:30 PM.');
+                return;
+            }
 
             const categories = ['Tacos', 'Quesadillas', 'Tortas', 'Megas', 'Orugas', 'Volcanes', 'Quesitortas', 'Chilaquiles', 'Bebidas'];
             let message = `Hola, TACOS CRIS. Mi nombre es ${customerName}. Quiero hacer un pedido:\n`;
