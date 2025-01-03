@@ -226,7 +226,39 @@ function filterMenu() {
     displayMenu(filteredItems);
 }
 
-// Mostrar todos los platillos al cargar
+/** PEDIDOS */
+
+function updateStoreStatus() {
+    const now = new Date();
+    const day = now.getDay(); // Domingo = 0, Jueves = 4
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    const isDayValid = day === 4 || day === 5 || day === 6 || day === 0; // Jueves a Domingo
+    const isTimeValid =
+        (hours === 19 && minutes >= 0) || // De 19:00 a 19:59
+        (hours >= 20 && hours < 23) || // De 20:00 a 22:59
+        (hours === 23 && minutes <= 30); // De 23:00 a 23:30
+
+    const storeStatusElement = document.getElementById('store-status');
+    if (isDayValid && isTimeValid) {
+        storeStatusElement.textContent = "¡La sucursal está ABIERTA!";
+        storeStatusElement.className = "store-status open";
+    } else {
+        storeStatusElement.textContent = "La sucursal está CERRADA.";
+        storeStatusElement.className = "store-status closed";
+    }
+}
+
+function redirectToOrderPage() {
+    alert("Redirigiendo a la página de pedido...");
+    window.location.href = "pedido.html";
+}
+
+// Inicializar
 window.onload = () => {
     displayMenu(menuItems);   
+
+    updateStoreStatus();
+    setInterval(updateStoreStatus, 60000); // Verificar cada minuto
 };
