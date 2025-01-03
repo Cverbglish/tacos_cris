@@ -6,6 +6,27 @@
     <title>Seleccionar Pedido</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style_pedidos.css">
+    <style>
+        /* Estilos para el botón flotante */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            display: none; /* Inicialmente oculto */
+            z-index: 1000;
+        }
+
+        .scroll-to-top:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -45,6 +66,9 @@
     <!-- Botón de dinero flotante -->
     <a class="scroll-to-summary" href="#rs">Ver Resumen de Pedido</a>
 
+    <!-- Botón flotante para volver arriba -->
+    <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
+
     <script src="products.js"></script>
     <script>
         const menuContainer = document.getElementById('menu-items');
@@ -52,18 +76,9 @@
         const totalCostElement = document.getElementById('total-cost');
         const searchBar = document.getElementById('search-bar');
         const categoryFilters = document.getElementById('category-filters');
-        let order = {};
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        let order = {}; // Orden persiste al buscar
         let customerName = '';
-
-        // Mantener el botón flotante de dinero visible durante el scroll
-        window.onscroll = function() {
-            const button = document.querySelector('.scroll-to-summary');
-            if (window.scrollY > 100) {
-                button.classList.add('show');
-            } else {
-                button.classList.remove('show');
-            }
-        };
 
         // Dynamically generate category buttons
         const categories = ['Todo', ...new Set(menuItems.map(item => item.category))];
@@ -86,6 +101,16 @@
             renderMenu(filteredItems);
         }
 
+        // Mantener el botón flotante de dinero visible durante el scroll
+        window.onscroll = function() {
+            const button = document.querySelector('.scroll-to-summary');
+            if (window.scrollY > 100) {
+                button.classList.add('show');
+            } else {
+                button.classList.remove('show');
+            }
+        };
+
         // Generate menu dynamically
         function renderMenu(items) {
             menuContainer.innerHTML = '';
@@ -99,13 +124,13 @@
                     <p><strong>$${item.price}</strong></p>
                     <div class="quantity-controls">
                         <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, -1)">-</button>
-                        <input type="text" id="quantity-${item.name}" class="quantity-input" value="0" readonly>
+                        <input type="text" id="quantity-${item.name}" class="quantity-input" value="${order[item.name] ? order[item.name].quantity : 0}" readonly>
                         <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, 1)">+</button>
                     </div>
                     ${item.category !== 'Bebidas' ? ` 
-                    <select onchange="updateOrder('${item.name}', ${item.price}, document.getElementById('quantity-${item.name}').value, this.value)">
-                        <option value="con verdura">Con verdura</option>
-                        <option value="sin verdura">Sin verdura</option>
+                    <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
+                        <option value="con verdura" ${order[item.name] && order[item.name].verdura === 'con verdura' ? 'selected' : ''}>Con verdura</option>
+                        <option value="sin verdura" ${order[item.name] && order[item.name].verdura === 'sin verdura' ? 'selected' : ''}>Sin verdura</option>
                     </select>` : ''}
                 `;
                 menuContainer.appendChild(menuItem);
@@ -115,20 +140,36 @@
         renderMenu(menuItems);
 
         // Update order with buttons for quantity
-        function updateOrder(productName, price, change, verduraOption) {
+        function updateOrder(productName, price, change) {
             const quantityInput = document.getElementById(`quantity-${productName}`);
             let quantity = parseInt(quantityInput.value) + change;
             if (quantity < 0) quantity = 0; // Prevent negative quantities
             quantityInput.value = quantity;
 
             if (quantity > 0) {
+                const verdura = document.getElementById(`verdura-${productName}`).value || '-';
                 order[productName] = {
                     price,
                     quantity,
-                    verdura: verduraOption || '-'
+                    verdura
                 };
             } else {
                 delete order[productName];
+            }
+            renderOrderSummary();
+        }
+
+        // Update verdura option
+        function updateVerdura(productName, price) {
+            const verdura = document.getElementById(`verdura-${productName}`).value;
+            if (order[productName]) {
+                order[productName].verdura = verdura;
+            } else {
+                order[productName] = {
+                    price,
+                    quantity: 1,
+                    verdura
+                };
             }
             renderOrderSummary();
         }
@@ -222,6 +263,22 @@
         }
 
         askForCustomerName();
+
+        // Mostrar el botón para volver arriba cuando se haga scroll
+        window.onscroll = function() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        };
+
+        // Función para hacer scroll hacia arriba
+        function scrollToTop() {
+            document.body.scrollTop = 0; // Para Safari
+            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE y Opera
+        }
     </script>
 </body>
 </html>
+
