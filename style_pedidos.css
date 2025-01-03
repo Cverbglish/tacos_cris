@@ -307,3 +307,24 @@ button:hover {
 .scroll-to-summary:focus {
     outline: none;
 }
+
+
+/* Agregar icono personalizado a la derecha del select */
+select::-ms-expand {
+    display: none;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 20px;
+    color: #ff7504;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
