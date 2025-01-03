@@ -2022,3 +2022,55 @@ p {
     font-size: 24px;
     color: #ff5722;
 }
+
+
+/*PEDIDOS*/
+
+.order-section {
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(145deg, #f9f9f9, #ffffff);
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #d4d4d4, -10px -10px 20px #ffffff;
+    max-width: 500px;
+}
+
+.order-phrase {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.store-status {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.store-status.open {
+    color: green;
+}
+
+.store-status.closed {
+    color: red;
+}
+
+.beautiful-button {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    color: white;
+    background: linear-gradient(90deg, #f09d51, #ff7433);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.beautiful-button:hover {
+    background: linear-gradient(90deg, #ff7433, #f09d51);
+    transform: scale(1.1);
+}
