@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -130,9 +131,11 @@ h1 {
     margin-top: 30px;
 }
 
+/* Responsivo para la tabla */
 table {
     width: 100%;
     border-collapse: collapse;
+    overflow-x: auto;
 }
 
 table th, table td {
@@ -188,6 +191,95 @@ button:hover {
         width: 80px;
         height: 80px;
     }
+
+    /* Hacer la tabla de resumen responsiva */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .order-summary {
+        padding-bottom: 20px;
+    }
+}
+
+/* Estilos para los botones de cantidad */
+.menu-item .quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.menu-item .quantity-controls button {
+    background-color: #ff7433;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.menu-item .quantity-controls button:hover {
+    background-color: #ff5733;
+}
+
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    padding: 10px;
+    border-radius: 50;
+    font-size: 1.2rem;
+    background-color: #ff7433;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.quantity-btn:hover {
+    background-color: #ff5733;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    font-size: 1rem;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary {
+    margin-top: 40px;
+}
+
+#order-summary-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+#order-summary-table th,
+#order-summary-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+#total-cost {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff7433;
 }
 
 /* Estilos para el botón flotante de desplazamiento */
