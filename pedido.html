@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Pedido</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_pedidos.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Selecciona tus productos</h1>
+        <div class="search-bar">
+            <input type="text" id="search-bar" placeholder="Buscar productos..." oninput="filterMenu()">
+        </div>
+
+        <div class="menu-tab-wp">
+            <div class="menu-tab">
+                <ul class="filters" id="category-filters">
+                    <!-- Category buttons will be generated here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="menu-section" id="menu-items"></div>
+        <div class="order-summary">
+            <h2 id="rs">Resumen de Pedido</h2>
+            <table id="order-summary-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Verdura</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p><strong>Total: $<span id="total-cost">0.00</span></strong></p>
+            <button onclick="submitOrder()">Finalizar Pedido</button>
+        </div>
+    </div>
+
+    <!-- Botón de dinero flotante -->
+    <a class="scroll-to-summary" href="#rs">Ver Resumen de Pedido</a>
+
+    <script src="products.js"></script>
+    <script>
+        const menuContainer = document.getElementById('menu-items');
+        const orderTableBody = document.querySelector('#order-summary-table tbody');
+        const totalCostElement = document.getElementById('total-cost');
+        const searchBar = document.getElementById('search-bar');
+        const categoryFilters = document.getElementById('category-filters');
+        let order = {};
+        let customerName = '';
+
+        // Mantener el botón flotante de dinero visible durante el scroll
+        window.onscroll = function() {
+            const button = document.querySelector('.scroll-to-summary');
+            if (window.scrollY > 100) {
+                button.classList.add('show');
+            } else {
+                button.classList.remove('show');
+            }
+        };
+
+        // Función que valida si el pedido se puede realizar según el día y hora
+    function canSubmitOrder() {
+        const now = new Date();
+        const dayOfWeek = now.getDay(); // 0 (domingo) a 6 (sábado)
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        
+        // Verificar si es de jueves a domingo entre 7:00 PM y 11:30 PM
+        if (dayOfWeek >= 4 && dayOfWeek <= 6 && ((hours > 19) || (hours === 19 && minutes >= 0)) && (hours < 23 || (hours === 23 && minutes <= 30))) {
+            return true;
+        }
+        return false;
+    }
+
+        // Dynamically generate category buttons
+        const categories = ['Todo', ...new Set(menuItems.map(item => item.category))];
+        categories.forEach(category => {
+            const categoryButton = document.createElement('li');
+            categoryButton.classList.add('filter');
+            categoryButton.innerHTML = `
+                <img src="assets/images/${category}.png" alt="${category} icon"> 
+                ${category.charAt(0).toUpperCase() + category.slice(1)}
+            `;
+            categoryButton.onclick = () => filterByCategory(category);
+            categoryFilters.appendChild(categoryButton);
+        });
+
+        // Filter menu items by category
+        function filterByCategory(category) {
+            const filteredItems = category === 'Todo' 
+                ? menuItems 
+                : menuItems.filter(item => item.category === category);
+            renderMenu(filteredItems);
+        }
+
+        // Generate menu dynamically
+        function renderMenu(items) {
+            menuContainer.innerHTML = '';
+            items.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.classList.add('menu-item');
+                menuItem.innerHTML = ` 
+                    <img src="${item.image}" alt="${item.name}"> 
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <p><strong>$${item.price}</strong></p>
+                    <input type="number" min="0" value="0" 
+                        onchange="updateOrder('${item.name}', ${item.price}, this.value, this.nextElementSibling?.value)">
+                    ${item.category !== 'Bebidas' ? ` 
+                    <select onchange="updateOrder('${item.name}', ${item.price}, this.previousElementSibling.value, this.value)">
+                        <option value="con verdura">Con verdura</option>
+                        <option value="sin verdura">Sin verdura</option>
+                    </select>` : ''}
+                `;
+                menuContainer.appendChild(menuItem);
+            });
+        }
+
+        renderMenu(menuItems);
+
+        // Update order
+        function updateOrder(productName, price, quantity, verduraOption) {
+            if (quantity > 0) {
+                order[productName] = {
+                    price,
+                    quantity: parseInt(quantity),
+                    verdura: verduraOption || '-'
+                };
+            } else {
+                delete order[productName];
+            }
+            renderOrderSummary();
+        }
+
+        // Render order summary
+        function renderOrderSummary() {
+            orderTableBody.innerHTML = '';
+            let totalCost = 0;
+
+            Object.entries(order).forEach(([productName, { price, quantity, verdura }]) => {
+                const total = price * quantity;
+                totalCost += total;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${verdura}</td>
+                    <td>$${price.toFixed(2)}</td>
+                    <td>$${total.toFixed(2)}</td>
+                `;
+                orderTableBody.appendChild(row);
+            });
+
+            totalCostElement.textContent = totalCost.toFixed(2);
+        }
+
+        // Filter menu items based on search
+        function filterMenu() {
+            const searchValue = searchBar.value.toLowerCase();
+            const filteredItems = menuItems.filter(item =>
+                item.name.toLowerCase().includes(searchValue) || 
+                item.category.toLowerCase().includes(searchValue)
+            );
+            renderMenu(filteredItems);
+        }
+
+        // Ask for customer name
+        function askForCustomerName() {
+            customerName = prompt('¿Cuál es tu nombre?');
+        }
+
+        // Enviar pedido
+        function submitOrder() {
+            if (Object.keys(order).length === 0) {
+                alert('Por favor selecciona al menos un producto.');
+                return;
+            }
+
+            // Verificar si el nombre del cliente está vacío
+            if (!customerName) {
+                alert('Por favor, ingresa tu nombre antes de realizar el pedido.');
+                askForCustomerName(); // Solicita el nombre si está vacío
+                return; // No continúa hasta que se ingrese el nombre
+            }
+
+            // Verificar si es el momento adecuado para realizar el pedido
+        if (!canSubmitOrder()) {
+            alert('Los pedidos solo pueden realizarse de jueves a domingo, de 7:00 PM a 11:30 PM.');
+            return;
+        }
+
+            const categories = ['Tacos', 'Quesadillas', 'Tortas', 'Megas', 'Orugas', 'Volcanes', 'Quesitortas', 'Chilaquiles', 'Bebidas'];
+            let message = `Hola, TACOS CRIS. Mi nombre es ${customerName}. Quiero hacer un pedido:\n`;
+
+            categories.forEach(category => {
+                const categoryItems = Object.entries(order)
+                    .filter(([productName, { price, quantity, verdura }]) => {
+                        const product = menuItems.find(item => item.name === productName);
+                        return product && product.category === category && quantity > 0;
+                    });
+
+                if (categoryItems.length > 0) {
+                    const categorySummary = categoryItems.map(([productName, { quantity }]) => quantity).reduce((a, b) => a + b, 0);
+                    message += `\n*${category.toUpperCase()} (${categorySummary})*\n`;
+
+                    categoryItems.forEach(([productName, { price, quantity, verdura }]) => {
+                        message += `- ${quantity} x ${productName} (${verdura}): $${(price * quantity).toFixed(2)}\n`;
+                    });
+                }
+            });
+
+            message += `\n\nTotal: $${totalCostElement.textContent}\nEn un momento paso por mi pedido.`;
+            const whatsappUrl = `https://wa.me/524777060853?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        askForCustomerName();
+    </script>
+</body>
+</html>
