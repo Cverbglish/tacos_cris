@@ -85,7 +85,7 @@
         categories.forEach(category => {
             const categoryButton = document.createElement('li');
             categoryButton.classList.add('filter');
-            categoryButton.innerHTML = `
+            categoryButton.innerHTML = ` 
                 <img src="assets/images/${category}.png" alt="${category} icon"> 
                 ${category.charAt(0).toUpperCase() + category.slice(1)}
             `;
@@ -127,13 +127,20 @@
                         <input type="text" id="quantity-${item.name}" class="quantity-input" value="${order[item.name] ? order[item.name].quantity : 0}" readonly>
                         <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, 1)">+</button>
                     </div>
-                    ${item.category !== 'Bebidas' ? ` 
+                    ${
+                        item.category !== 'Bebidas' ? ` 
                     <div class="select-wrapper">
                         <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
                             <option value="con verdura" ${order[item.name] && order[item.name].verdura === 'con verdura' ? 'selected' : ''}>Con verdura</option>
                             <option value="sin verdura" ${order[item.name] && order[item.name].verdura === 'sin verdura' ? 'selected' : ''}>Sin verdura</option>
                         </select>
-                    </div>` : ''}
+                    </div>` : ` 
+                    <div class="select-wrapper">
+                        <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
+                            <option value="-" ${order[item.name] && order[item.name].verdura === '-' ? 'selected' : ''}>-</option>
+                        </select>
+                    </div>` 
+                }
                 `;
                 menuContainer.appendChild(menuItem);
             });
@@ -149,7 +156,8 @@
             quantityInput.value = quantity;
 
             if (quantity > 0) {
-                const verdura = document.getElementById(`verdura-${productName}`).value || '-';
+                // If it's a drink, no verdura option
+                const verdura = productName.toLowerCase().includes("bebida") ? '-' : document.getElementById(`verdura-${productName}`).value;
                 order[productName] = {
                     price,
                     quantity,
@@ -268,19 +276,17 @@
 
         // Mostrar el botón para volver arriba cuando se haga scroll
         window.onscroll = function() {
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
                 scrollToTopBtn.style.display = "block";
             } else {
                 scrollToTopBtn.style.display = "none";
             }
         };
 
-        // Función para hacer scroll hacia arriba
         function scrollToTop() {
-            document.body.scrollTop = 0; // Para Safari
-            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE y Opera
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
 </body>
 </html>
-
