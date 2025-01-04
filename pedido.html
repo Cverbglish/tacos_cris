@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style_pedidos.css">
     <style>
-        /* Estilos para el botón flotante */
         .scroll-to-top {
             position: fixed;
             bottom: 20px;
@@ -19,13 +18,78 @@
             padding: 15px;
             font-size: 20px;
             cursor: pointer;
-            display: none; /* Inicialmente oculto */
             z-index: 1000;
         }
 
         .scroll-to-top:hover {
             background-color: #45a049;
         }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .quantity-controls button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #0056b3;
+        }
+
+        .quantity-controls input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-to-order-btn {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .add-to-order-btn:hover {
+            background-color: #ec971f;
+        }
+
+        .notification {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #6bdf5d, #4CAF50);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
     </style>
 </head>
 <body>
@@ -37,9 +101,7 @@
 
         <div class="menu-tab-wp">
             <div class="menu-tab">
-                <ul class="filters" id="category-filters">
-                    <!-- Category buttons will be generated here -->
-                </ul>
+                <ul class="filters" id="category-filters"></ul>
             </div>
         </div>
 
@@ -61,12 +123,10 @@
             <p><strong>Total: $<span id="total-cost">0.00</span></strong></p>
             <button onclick="submitOrder()">Finalizar Pedido</button>
         </div>
+        <div class="notification" id="notification"></div>
     </div>
 
-    <!-- Botón de dinero flotante -->
     <a class="scroll-to-summary" href="#rs">Ver Resumen de Pedido</a>
-
-    <!-- Botón flotante para volver arriba -->
     <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
 
     <script src="products.js"></script>
@@ -74,169 +134,209 @@
         const menuContainer = document.getElementById('menu-items');
         const orderTableBody = document.querySelector('#order-summary-table tbody');
         const totalCostElement = document.getElementById('total-cost');
-        const searchBar = document.getElementById('search-bar');
         const categoryFilters = document.getElementById('category-filters');
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-        let order = {}; // Orden persiste al buscar
-        let customerName = '';
+        const notification = document.getElementById('notification');
+        let order = [];
+        let customerName = '';  // Variable para almacenar el nombre del cliente
 
-        // Dynamically generate category buttons
-        const categories = ['Todo', ...new Set(menuItems.map(item => item.category))];
+        function filterMenu() {
+    const query = document.getElementById('search-bar').value.toLowerCase();
+    const filteredItems = menuItems.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        item.description.toLowerCase().includes(query)
+    );
+    renderMenu(filteredItems);
+}
+
+const todoButton = document.createElement('li');
+todoButton.classList.add('filter');
+todoButton.innerHTML = 'Todo';
+todoButton.onclick = () => filterByCategory('Todo');
+categoryFilters.appendChild(todoButton);
+
+    
+        const categories = ['Tacos', 'Quesadillas', 'Tortas', 'Megas', 'Orugas', 'Volcanes', 'Quesitortas', 'Chilaquiles', 'Bebidas'];
+        
         categories.forEach(category => {
             const categoryButton = document.createElement('li');
             categoryButton.classList.add('filter');
-            categoryButton.innerHTML = ` 
-                <img src="assets/images/${category}.png" alt="${category} icon"> 
-                ${category.charAt(0).toUpperCase() + category.slice(1)}
-            `;
+            categoryButton.innerHTML = `${category}`;
             categoryButton.onclick = () => filterByCategory(category);
             categoryFilters.appendChild(categoryButton);
         });
-
-        // Filter menu items by category
+    
         function filterByCategory(category) {
             const filteredItems = category === 'Todo' 
                 ? menuItems 
                 : menuItems.filter(item => item.category === category);
             renderMenu(filteredItems);
         }
-
-        // Mantener el botón flotante de dinero visible durante el scroll
-        window.onscroll = function() {
-            const button = document.querySelector('.scroll-to-summary');
-            if (window.scrollY > 100) {
-                button.classList.add('show');
-            } else {
-                button.classList.remove('show');
-            }
-        };
-
-        // Generate menu dynamically
+    
         function renderMenu(items) {
             menuContainer.innerHTML = '';
             items.forEach(item => {
                 const menuItem = document.createElement('div');
                 menuItem.classList.add('menu-item');
-                menuItem.innerHTML = ` 
-                    <img src="${item.image}" alt="${item.name}"> 
+                menuItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
                     <p><strong>$${item.price}</strong></p>
                     <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, -1)">-</button>
-                        <input type="text" id="quantity-${item.name}" class="quantity-input" value="${order[item.name] ? order[item.name].quantity : 0}" readonly>
-                        <button class="quantity-btn" onclick="updateOrder('${item.name}', ${item.price}, 1)">+</button>
+                        <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                        <input type="number" id="quantity-${item.name}" value="1" min="1">
+                        <button onclick="updateQuantity('${item.name}', 1)">+</button>
                     </div>
-                    ${
-                        item.category !== 'Bebidas' ? ` 
                     <div class="select-wrapper">
-                        <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
-                            <option value="con verdura" ${order[item.name] && order[item.name].verdura === 'con verdura' ? 'selected' : ''}>Con verdura</option>
-                            <option value="sin verdura" ${order[item.name] && order[item.name].verdura === 'sin verdura' ? 'selected' : ''}>Sin verdura</option>
+                        <select id="verdura-${item.name}">
+                            ${item.category === 'Bebidas' ? `` 
+                                : `
+                                <option value="con verdura">Con verdura</option>
+                                <option value="sin verdura">Sin verdura</option>`}
                         </select>
-                    </div>` : ` 
-                    <div class="select-wrapper">
-                        <select id="verdura-${item.name}" onchange="updateVerdura('${item.name}', ${item.price})">
-                            <option value="-" ${order[item.name] && order[item.name].verdura === '-' ? 'selected' : ''}>-</option>
-                        </select>
-                    </div>` 
-                }
+                    </div>
+                    <button class="add-to-order-btn" onclick="addToOrder('${item.name}', ${item.price}, '${item.category}')">Agregar</button>
                 `;
                 menuContainer.appendChild(menuItem);
             });
         }
-
-        renderMenu(menuItems);
-
-        // Update order with buttons for quantity
-        function updateOrder(productName, price, change) {
-            const quantityInput = document.getElementById(`quantity-${productName}`);
-            let quantity = parseInt(quantityInput.value) + change;
-            if (quantity < 0) quantity = 0; // Prevent negative quantities
-            quantityInput.value = quantity;
-
-            if (quantity > 0) {
-                // If it's a drink, no verdura option
-                const verdura = productName.toLowerCase().includes("bebida") ? '-' : document.getElementById(`verdura-${productName}`).value;
-                order[productName] = {
+    
+        function addToOrder(productName, price, category) {
+            const quantity = parseInt(document.getElementById(`quantity-${productName}`).value);
+            const verdura = document.getElementById(`verdura-${productName}`).value;
+    
+            const existingItemIndex = order.findIndex(item => item.name === productName && item.verdura === verdura && item.category === category);
+            if (existingItemIndex !== -1) {
+                order[existingItemIndex].quantity += quantity;
+            } else {
+                order.push({
+                    name: productName,
                     price,
                     quantity,
-                    verdura
-                };
-            } else {
-                delete order[productName];
+                    verdura,
+                    category
+                });
             }
+    
+            showNotification(productName);
             renderOrderSummary();
+            document.getElementById(`quantity-${productName}`).value = 1;
         }
-
-        // Update verdura option
-        function updateVerdura(productName, price) {
-            const verdura = document.getElementById(`verdura-${productName}`).value;
-            if (order[productName]) {
-                order[productName].verdura = verdura;
-            } else {
-                order[productName] = {
-                    price,
-                    quantity: 1,
-                    verdura
-                };
-            }
-            renderOrderSummary();
+    
+        function showNotification(productName) {
+            notification.textContent = `¡Has agregado "${productName}" al pedido exitosamente!`;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
         }
-
-        // Render order summary
+    
         function renderOrderSummary() {
             orderTableBody.innerHTML = '';
             let totalCost = 0;
-
-            Object.entries(order).forEach(([productName, { price, quantity, verdura }]) => {
-                const total = price * quantity;
-                totalCost += total;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${productName}</td>
-                    <td>${quantity}</td>
-                    <td>${verdura}</td>
-                    <td>$${price.toFixed(2)}</td>
-                    <td>$${total.toFixed(2)}</td>
+    
+            // Agrupamos los productos por categoría
+            const groupedOrder = groupOrderByCategory(order);
+            for (const category in groupedOrder) {
+                let categoryTotal = 0;  // Total de cada categoría
+                const categoryRow = document.createElement('tr');
+                categoryRow.innerHTML = `<td colspan="6"><strong>${category}</strong></td>`;
+                orderTableBody.appendChild(categoryRow);
+    
+                groupedOrder[category].forEach(item => {
+                    const total = item.price * item.quantity;
+                    categoryTotal += total;  // Sumar total por producto a la categoría
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>
+                            <div class="quantity-controls">
+                                <button onclick="updateOrderItemQuantity('${item.name}', -1)">-</button>
+                                <input type="number" id="quantity-${item.name}" value="${item.quantity}" min="1" readonly>
+                                <button onclick="updateOrderItemQuantity('${item.name}', 1)">+</button>
+                            </div>
+                        </td>
+                        <td>${item.verdura}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td>$${total.toFixed(2)}</td>
+                        <td>
+                            <button onclick="removeOrderItemPrompt('${item.name}')">Eliminar</button>
+                        </td>
+                    `;
+                    orderTableBody.appendChild(row);
+                });
+    
+                // Agregar fila de total por categoría
+                const categoryTotalRow = document.createElement('tr');
+                categoryTotalRow.innerHTML = `
+                    <td colspan="4"><strong>Total de ${category}:</strong></td>
+                    <td>$${categoryTotal.toFixed(2)}</td>
+                    <td></td>
                 `;
-                orderTableBody.appendChild(row);
-            });
-
+                orderTableBody.appendChild(categoryTotalRow);
+                totalCost += categoryTotal;  // Sumar el total de la categoría al total general
+            }
+    
             totalCostElement.textContent = totalCost.toFixed(2);
         }
-
-        // Filter menu items based on search
-        function filterMenu() {
-            const searchValue = searchBar.value.toLowerCase();
-            const filteredItems = menuItems.filter(item =>
-                item.name.toLowerCase().includes(searchValue) || 
-                item.category.toLowerCase().includes(searchValue)
-            );
-            renderMenu(filteredItems);
+    
+        function groupOrderByCategory(order) {
+            return order.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                    acc[item.category] = [];
+                }
+    
+                // Si el producto ya existe en la categoría, sumamos las cantidades
+                const existingItemIndex = acc[item.category].findIndex(i => i.name === item.name && i.verdura === item.verdura);
+                if (existingItemIndex !== -1) {
+                    acc[item.category][existingItemIndex].quantity += item.quantity;
+                } else {
+                    acc[item.category].push({...item}); // Agregar una copia del producto
+                }
+                return acc;
+            }, {});
         }
-
-        // Ask for customer name
-        function askForCustomerName() {
-            customerName = prompt('¿Cuál es tu nombre?');
+    
+        function updateQuantity(productName, change) {
+            const quantityInput = document.getElementById(`quantity-${productName}`);
+            let currentQuantity = parseInt(quantityInput.value);
+            currentQuantity += change;
+    
+            if (currentQuantity < 1) currentQuantity = 1;
+            quantityInput.value = currentQuantity;
         }
-
-        // Submit order
+    
+        function updateOrderItemQuantity(productName, change) {
+            const itemIndex = order.findIndex(item => item.name === productName);
+            if (itemIndex !== -1) {
+                order[itemIndex].quantity += change;
+                if (order[itemIndex].quantity < 1) order[itemIndex].quantity = 1;
+                renderOrderSummary();
+            }
+        }
+    
+        function removeOrderItemPrompt(productName) {
+            const itemIndex = order.findIndex(item => item.name === productName);
+            if (itemIndex !== -1) {
+                order.splice(itemIndex, 1);
+                renderOrderSummary();
+            }
+        }
+    
         function submitOrder() {
-            if (Object.keys(order).length === 0) {
-                alert('Por favor selecciona al menos un producto.');
-                return;
-            }
+    if (order.length === 0) {
+        alert('Por favor selecciona al menos un producto.');
+        return;
+    }
 
-            // Verificar si el nombre del cliente está vacío
-            if (!customerName) {
-                alert('Por favor, ingresa tu nombre antes de realizar el pedido.');
-                askForCustomerName(); // Solicita el nombre si está vacío
-                return; // No continúa hasta que se ingrese el nombre
-            }
+    if (!customerName) {
+        customerName = prompt('¿Cuál es tu nombre?');
+        if (!customerName) return;
+    }
 
-            // Verificar si es el momento adecuado para realizar el pedido
-            const now = new Date();
+    // Verificar si es el momento adecuado para realizar el pedido
+    const now = new Date();
             const dayOfWeek = now.getDay(); // 0 (domingo) a 6 (sábado)
             const hours = now.getHours();
             const minutes = now.getMinutes();
@@ -247,46 +347,44 @@
                 return;
             }
 
-            const categories = ['Tacos', 'Quesadillas', 'Tortas', 'Megas', 'Orugas', 'Volcanes', 'Quesitortas', 'Chilaquiles', 'Bebidas'];
-            let message = `Hola, TACOS CRIS. Mi nombre es ${customerName}. Quiero hacer un pedido:\n`;
+    let message = `Hola, TACOS CRIS. Mi nombre es *${customerName}*. Quiero hacer un pedido:\n`;
 
-            categories.forEach(category => {
-                const categoryItems = Object.entries(order)
-                    .filter(([productName, { price, quantity, verdura }]) => {
-                        const product = menuItems.find(item => item.name === productName);
-                        return product && product.category === category && quantity > 0;
-                    });
+    // Lista de categorías en el orden que deseas
+    const orderedCategories = ['Tacos', 'Quesadillas', 'Tortas', 'Megas', 'Orugas', 'Volcanes', 'Quesitortas', 'Chilaquiles', 'Bebidas'];
 
-                if (categoryItems.length > 0) {
-                    const categorySummary = categoryItems.map(([productName, { quantity }]) => quantity).reduce((a, b) => a + b, 0);
-                    message += `\n*${category.toUpperCase()} (${categorySummary})*\n`;
+    // Agrupamos los productos por categoría
+    const groupedOrder = groupOrderByCategory(order);
 
-                    categoryItems.forEach(([productName, { price, quantity, verdura }]) => {
-                        message += `- ${quantity} x ${productName} (${verdura}): $${(price * quantity).toFixed(2)}\n`;
-                    });
-                }
+    // Recorremos las categorías en el orden deseado
+    orderedCategories.forEach(category => {
+        if (groupedOrder[category] && groupedOrder[category].length > 0) {
+            // Contar la cantidad total de productos en la categoría
+            const totalQuantityInCategory = groupedOrder[category].reduce((total, item) => total + item.quantity, 0);
+            message += `\n*${category.toUpperCase()} (${totalQuantityInCategory})*:\n`; // Nombre de la categoría + cantidad total
+            const categoryItems = groupedOrder[category];
+
+            // Mostrar los productos de la categoría
+            categoryItems.forEach(item => {
+                const totalQuantity = item.quantity; // Total de cantidad de un producto en particular
+                message += `- ${totalQuantity} x ${item.name} (${item.verdura}): $${(item.price * totalQuantity).toFixed(2)}\n`;
             });
-
-            message += `\n\nTotal: $${totalCostElement.textContent}\nEn un momento paso por mi pedido.`;
-            const whatsappUrl = `https://wa.me/524777060853?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
         }
+    });
 
-        askForCustomerName();
+    // Total general
+    message += `\nTotal: *$${totalCostElement.textContent}*`;
+    message += `\nEn un momento paso por mi pedido.`;
 
-        // Mostrar el botón para volver arriba cuando se haga scroll
-        window.onscroll = function() {
-            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-                scrollToTopBtn.style.display = "block";
-            } else {
-                scrollToTopBtn.style.display = "none";
-            }
-        };
+    const whatsappUrl = `https://wa.me/524777060853?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
 
-        function scrollToTop() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+    
+        renderMenu(menuItems);
     </script>
+    
 </body>
 </html>
