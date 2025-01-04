@@ -328,3 +328,9 @@ select::-ms-expand {
     transform: translateY(-50%);
     pointer-events: none;
 }
+
+
+html {
+    scroll-behavior: smooth;
+}
+
